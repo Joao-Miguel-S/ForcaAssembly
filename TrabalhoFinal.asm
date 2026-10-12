@@ -1,20 +1,51 @@
 ORG 0
 
 INICIO:
-    LDA #7
-    TRAP SEMENTE             
+    LDA  SEMENTE
+    ADD  #53
+    STA  SEMENTE
 
+    LDA  #7
+    TRAP SEMENTE
+            
 CALCULA_RESTO:
-    SUB 20                 
-    JN PEGA_RESTO
-    JMP CALCULA_RESTO
+    SUB  #20
+    JNC  CALCULA_RESTO
+    ADD  #20
+    STA  WORD_POSITION
+
+    SHL
+    STA  OFFSET_TEMP
+
+    LDA  VETOR_BASE_REF
+    ADD  OFFSET_TEMP
+    STA  PTR_TEMP
+    LDA  VETOR_BASE_REF+1
+    ADC  #0
+    STA  PTR_TEMP+1
+
+    LDA  @PTR_TEMP
+    STA  PTR_ANSWER
+
+    LDA  PTR_TEMP
+    ADD  #1
+    STA  PTR_TEMP
+    LDA  PTR_TEMP+1
+    ADC  #0
+    STA  PTR_TEMP+1
+
+    LDA  @PTR_TEMP
+    STA  PTR_ANSWER+1
+
+    JMP  PEGA_RESTO   
 
 PEGA_RESTO:
-    ADD 20                 
+          
     STA WORD_POSITION
-    JMP SETUP
+    JMP PEGA_PALAVRA
 
 PEGA_PALAVRA:
+
     LDA PTR_ANSWER       
     ADD #6
     STA PTR_ANSWER
@@ -25,6 +56,7 @@ PEGA_PALAVRA:
 
     LDA WORD_POSITION
     SUB #1
+    STA WORD_POSITION
 
     JZ  SETUP
     JMP PEGA_PALAVRA
@@ -810,7 +842,11 @@ ERRO:   OUT  0
         HLT
         
 
-ORG 1600
+ORG 2000
+
+OFFSET_TEMP:   DB 0
+PTR_TEMP:      DW 0
+VETOR_BASE_REF: DW VETOR_PALAVRAS
 
 WON:  DB  1
 ENTER: STR "\n"
@@ -870,9 +906,7 @@ SEMENTE:        DB 13
 
 USER_INPUT:         DS   5 
 DB                  0
-ANSWER:             STR "VELHA"
-DB                  0
-PTR_ANSWER:         DW  ANSWER
+PTR_ANSWER:         DW  VETOR_PALAVRAS
 PTR_USER:           DW  USER_INPUT
 PTR_CORRECT:        DW  CORRECT_POSITION
 PTR_HINT:           DW  HINT_ARRAY
