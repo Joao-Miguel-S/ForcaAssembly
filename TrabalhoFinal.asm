@@ -94,7 +94,7 @@ INIT_GAME:
 
 RESET_CORRECT_POSITION_STRING:
 
-    LDA PTR_CORRECT
+    LDA @PTR_CORRECT
     OR #0
     JZ RESET_CORRECT_POINTER
 
@@ -888,7 +888,7 @@ HINT_INDEX:         DB  0  ; Adicionar os caracteres corretos nas posições cor
 
 Err_Message_Invalid_Char:    STR   "\nValido apenas letras em CAPSLOCK" 
 DB                  0
-Hint_Message:                STR   "\nTais letras estão na resposta, não necessariamente nessa ordem: "
+Hint_Message:                STR   "\nTais letras estão na resposta, não necessariamente nessa ordem e nem nessa quantidade: "
 DB                  0
 
 VIDEO_CONFIG: DW 16384  
