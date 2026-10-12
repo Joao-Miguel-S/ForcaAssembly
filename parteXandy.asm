@@ -5,22 +5,24 @@ INICIO:
     CALL EXIBIR_PALAVRA
     HLT
 
-SORTEAR_PALAVRA:
+SORTEAR_PALAVRA:    ;função que sorteia
     LDI SEMENTE
     TRAP 7
-CALCULA_RESTO:
+CALCULA_RESTO:      ;função que calcula o resto de 0 a 99 \qtd das palavras no vet
     SUB 20
     JN PEGA_RESTO
     JMP CALCULA_RESTO
-PEGA_RESTO:
+PEGA_RESTO:         ;joga o resto da div no Acumulador, esse valor será o indice
     ADD 20
     RET
 
-EXIBIR_PALAVRA:
-    TRAP 4 STR_VELHA       
+EXIBIR_PALAVRA:     ;exibe a plavra no console virtual
+    TRAP 4 STR_VELHA       ;deve ser substituido uqando juntar tudo pela strig sorteada
     RET
 
 ORG 600h
+
+;Aqui define cada alavra que pode ser sorteada
 
 STR_VELHA: DB "VELHA", 0
 STR_TELHA: DB "TELHA", 0
@@ -43,7 +45,8 @@ STR_MUITO: DB "MUITO", 0
 STR_ELITE: DB "ELITE", 0
 STR_FATAL: DB "FATAL", 0
 
-VETOR_PALAVRAS:
+VETOR_PALAVRAS: ;É o vetor das palavras
+
     DW STR_VELHA, STR_TELHA, STR_FILHA, STR_FALHA, STR_LINHA
     DW STR_VINHO, STR_FILME, STR_MENTE, STR_LENTO, STR_FEITO
     DW STR_HOMEM, STR_ONTEM, STR_METAL, STR_VITAL, STR_HOTEL
