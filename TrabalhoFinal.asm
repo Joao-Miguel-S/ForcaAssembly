@@ -92,6 +92,36 @@ INIT_GAME:
 
     JMP COMPARE
 
+RESET_CORRECT_POSITION_STRING:
+    LDA PTR_CORRECT
+    OR #0
+    JZ RESET_CORRECT_POINTER
+
+    LDA #95
+    STA PTR_CORRECT 
+
+    LDA PTR_CORRECT
+    ADD #1
+    STA PTR_CORRECT
+
+    LDA PTR_CORRECT+1
+    ADC #0
+    STA PTR_CORRECT+1
+
+    JMP RESET_CORRECT_POSITION_STRING
+
+RESET_CORRECT_POINTER:
+    LDA PTR_CORRECT
+    SUB #5
+    STA PTR_CORRECT
+
+    LDA PTR_CORRECT+1
+    SBC #0
+    STA PTR_CORRECT+1
+
+    JMP READ_STRING
+
+
 ; --------------------------------------------------------- Linhas sobre a lógica do jogo
 
 COMPARE:                        ; função para comparar caracter por caracter
@@ -217,7 +247,6 @@ PREPARE_HINT:            ; decrementando os ponteiros
     SBC #0
     STA PTR_USER+1
 
-
     LDA PTR_ANSWER           
     SUB #5
     STA PTR_ANSWER
@@ -329,7 +358,7 @@ SHOW_HINT:
     SBC #0
     STA PTR_ANSWER+1
 
-    JMP  READ_STRING
+    JMP  RESET_CORRECT_POSITION_STRING
 
 LINHAS:
         LDA #23
