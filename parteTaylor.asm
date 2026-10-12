@@ -1,5 +1,5 @@
 ORG 0
-SETUP: ;rotina de configuração inicial
+SETUP:
         LDA  #20
         TRAP VIDEO_CONFIG
         OR   #0
@@ -13,7 +13,7 @@ SETUP: ;rotina de configuração inicial
         LDA #24
         TRAP MOLD_TELA_S
 
-LINHAS: ;rotina para desenhar as linhas de base onde os caracteres irão ficar
+LINHAS:
         LDA #23
         TRAP LINHA
         LDA ESPACAMENTO
@@ -29,7 +29,7 @@ LINHAS: ;rotina para desenhar as linhas de base onde os caracteres irão ficar
         JZ   BONECO
         JMP  LINHAS
 
-BONECO: ;rotina de desenho do boneco por partes, a cada chamada
+BONECO:
         LDA  PARTE
         JZ   P_CABECA        
         SUB  #1
@@ -76,7 +76,7 @@ PROXIMA:
 A:
         LDA #5
         STA HASTE_DIAG+2
-        STA HASTE_DIAG_2+2 ;ajustes do tamanho da diagonal pra nao escapar da linha
+        STA HASTE_DIAG_2+2   ; ajustes do tamanho da diagonal pra nao escapar da linha
         LDA X_OFFSET
         STA HASTE_DIAG_2
         ADD HASTE_DIAG_2+2
@@ -183,7 +183,7 @@ I:
         TRAP HASTE_HOR
          
         LDA HASTE_HOR+2
-        SUB #5 ; metade do espaço total ocupado por qualquer caractere
+        SUB #5              ; metade do espaço total ocupado por qualquer caractere
         STA HASTE_VERT
         STA HASTE_VERT+2
         LDA #23
@@ -261,7 +261,7 @@ T:
         TRAP HASTE_HOR
          
         LDA HASTE_HOR+2
-        SUB #5 ; metade do espaço total ocupado por qualquer caractere
+        SUB #5             ; metade do espaço total ocupado por qualquer caractere
         STA HASTE_VERT
         STA HASTE_VERT+2
         LDA #23
@@ -296,7 +296,7 @@ U:
 V:
         LDA #5
         STA HASTE_DIAG_2+2
-        STA HASTE_DIAG+2 ;ajustes do tamanho da diagonal pra nao escapar da linha
+        STA HASTE_DIAG+2   ; ajustes do tamanho da diagonal pra nao escapar da linha
         LDA X_OFFSET
         STA HASTE_DIAG
         ADD HASTE_DIAG+2
@@ -317,7 +317,7 @@ V:
 M: 
         LDA #5
         STA HASTE_DIAG_2+2
-        STA HASTE_DIAG+2 ;ajustes do tamanho da diagonal pra nao escapar da linha
+        STA HASTE_DIAG+2   ; ajustes do tamanho da diagonal pra nao escapar da linha
 
         LDA X_OFFSET
         STA HASTE_VERT
@@ -346,10 +346,7 @@ M:
         TRAP HASTE_DIAG_2
 
         JMP NORMALIZACAO
-        
-        
 
-        
 NORMALIZACAO:      ;rotina pra retornar os valores das retas para o padrão
         LDA #0
         STA HASTE_VERT
@@ -368,6 +365,45 @@ NORMALIZACAO:      ;rotina pra retornar os valores das retas para o padrão
         STA HASTE_HOR+3
 
         JMP FIM
+
+DESENHA_LETRA:           ; rotina para desenhar uma letra a partir do seu código ASCII
+        LDA CARAC
+        XOR #65          ; A
+        JZ  A
+        LDA CARAC
+        XOR #69          ; E
+        JZ  E
+        LDA CARAC
+        XOR #70          ; F
+        JZ  F
+        LDA CARAC
+        XOR #72          ; H
+        JZ  H
+        LDA CARAC
+        XOR #73          ; I
+        JZ  I
+        LDA CARAC
+        XOR #76          ; L
+        JZ  L
+        LDA CARAC
+        XOR #77          ; M
+        JZ  M
+        LDA CARAC
+        XOR #78          ; N
+        JZ  N
+        LDA CARAC
+        XOR #79          ; O
+        JZ  O
+        LDA CARAC
+        XOR #84          ; T
+        JZ  T
+        LDA CARAC
+        XOR #85          ; U
+        JZ  U
+        LDA CARAC
+        XOR #86          ; V
+        JZ  V
+        JMP             ; caractere desconhecido
 
 FIM:    LDA  #0
 ERRO:   OUT  0
@@ -396,6 +432,8 @@ HASTE_DIAG:   DB 0, 48, 10, 58, 0
 HASTE_DIAG_2: DB 0, 58, 10, 48, 0
 HASTE_HOR:    DB 0, 53, 10, 53, 0 
 RETANGULO:    DB 0, 0, 10, 10, 0, 0
+
+CARAC: DB 0
 
 
 END SETUP
