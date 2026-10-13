@@ -7,7 +7,7 @@ INICIO:
 
     LDA  #7
     TRAP SEMENTE
-            
+
 CALCULA_RESTO:
     SUB  #20
     JNC  CALCULA_RESTO
@@ -37,29 +37,10 @@ CALCULA_RESTO:
     LDA  @PTR_TEMP
     STA  PTR_ANSWER+1
 
-    JMP  PEGA_RESTO   
+    LDA  @PTR_TEMP
+    STA  PTR_ANSWER+1
 
-PEGA_RESTO:
-          
-    STA WORD_POSITION
-    JMP PEGA_PALAVRA
-
-PEGA_PALAVRA:
-
-    LDA PTR_ANSWER       
-    ADD #6
-    STA PTR_ANSWER
-
-    LDA PTR_ANSWER+1
-    ADC #0
-    STA PTR_ANSWER+1
-
-    LDA WORD_POSITION
-    SUB #1
-    STA WORD_POSITION
-
-    JZ  SETUP
-    JMP PEGA_PALAVRA
+    JMP  SETUP
 
 SETUP:
     LDA  #20
@@ -266,6 +247,8 @@ RESET_PTR_CORRECT:
     JMP BONECO
 
 FIM:
+    LDA #4
+    TRAP WIN_MESSAGE
     HLT
 
 ; -------------------------------------------- Dicas para o usuário ----------------------------------------------------------------------------------
@@ -424,8 +407,7 @@ BONECO:
         SUB  #1
         JZ   P_BRACO_ESQ     
         SUB  #1
-        JZ   P_BRACO_DIR     
-        JMP  FIM             
+        JZ   P_BRACO_DIR             
 
 P_CABECA:
         LDA  #25
@@ -450,6 +432,7 @@ P_BRACO_ESQ:
 P_BRACO_DIR:
         LDA  #23
         TRAP BRACO_DIR
+        JMP DERROTA
 
 PROXIMA:
         LDA  PARTE
@@ -840,7 +823,20 @@ DESENHA_LETRA:           ; rotina para desenhar uma letra a partir do seu códig
 
 ERRO:   OUT  0
         HLT
-        
+
+DERROTA:
+        LDA PTR_ANSWER
+        SUB #5
+        STA PTR_ANSWER
+        LDA PTR_ANSWER+1
+        SBC #0
+        LDA PTR_ANSWER+1
+        LDA #4
+        TRAP DEFEAT_MESSAGE   
+        LDA #4
+        TRAP @PTR_ANSWER
+        HLT
+
 
 ORG 2000
 
@@ -923,6 +919,11 @@ HINT_INDEX:         DB  0  ; Adicionar os caracteres corretos nas posições cor
 Err_Message_Invalid_Char:    STR   "\nValido apenas letras em CAPSLOCK" 
 DB                  0
 Hint_Message:                STR   "\nTais letras estão na resposta, não necessariamente nessa ordem e nem nessa quantidade: "
+DB                  0
+
+WIN_MESSAGE:                 STR   "\nParabéns! Você venceu! A palavra era "
+DB                  0
+DEFEAT_MESSAGE:              STR    "\nPoxa! Você perdeu... A palavra era "
 DB                  0
 
 VIDEO_CONFIG: DW 16384  
