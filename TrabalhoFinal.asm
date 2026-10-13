@@ -1,3 +1,4 @@
+; Trabalho realizdo por: Taylor Horta, João Miguel Sales e Alexandre Rimes
 ORG 0
 
 INICIO:
