@@ -771,7 +771,7 @@ RESETAR_PONT:
     SBC #0
     STA PTR_CORRECT+1
     
-    LDA #18
+    LDA #19
     STA X_OFFSET
 
     LDA #0
@@ -921,7 +921,7 @@ DB                  0
 Hint_Message:                STR   "\nTais letras estão na resposta, não necessariamente nessa ordem e nem nessa quantidade: "
 DB                  0
 
-WIN_MESSAGE:                 STR   "\nParabéns! Você venceu! A palavra era "
+WIN_MESSAGE:                 STR   "\nParabéns! Você venceu!"
 DB                  0
 DEFEAT_MESSAGE:              STR    "\nPoxa! Você perdeu... A palavra era "
 DB                  0
